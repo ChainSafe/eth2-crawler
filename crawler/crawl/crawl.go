@@ -21,6 +21,12 @@ import (
 	"github.com/ethereum/go-ethereum/p2p/enode"
 )
 
+// Eth2 ForkDigests for different Networks/Forks
+var (
+	MainnetPhase0ForkDigest = "0xb5303f2a"
+	MainnetAltairForkDigest = "0xafcaaba0"
+)
+
 type crawler struct {
 	disc            resolver
 	peerStore       peerstore.Provider
@@ -91,22 +97,27 @@ func (c *crawler) storePeer(ctx context.Context, node *enode.Node) {
 	if node.TCP() == 0 {
 		return
 	}
+
 	// filter only eth2 nodes
 	eth2Data, err := util.ParseEnrEth2Data(node)
 	if err != nil { // not eth2 nodes
 		return
 	}
-	log.Debug("found a eth2 node", log.Ctx{"node": node})
 
-	// get basic info
-	peer, err := models.NewPeer(node, eth2Data)
-	if err != nil {
-		return
-	}
-	// save to db if not exists
-	err = c.peerStore.Create(ctx, peer)
-	if err != nil {
-		log.Error("err inserting peer", log.Ctx{"err": err, "peer": peer.String()})
+	// Check whether the ForkDigest of the received peer matches the
+	// network/fork that we want to crawl
+	if eth2Data.ForkDigest.String() == MainnetAltairForkDigest {
+		log.Debug("found a eth2 node", log.Ctx{"node": node})
+		// get basic info
+		peer, err := models.NewPeer(node, eth2Data)
+		if err != nil {
+			return
+		}
+		// save to db if not exists
+		err = c.peerStore.Create(ctx, peer)
+		if err != nil {
+			log.Error("err inserting peer", log.Ctx{"err": err, "peer": peer.String()})
+		}
 	}
 }
 
