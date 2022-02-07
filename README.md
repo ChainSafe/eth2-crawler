@@ -2,7 +2,7 @@
 Eth2 Crawler is Ethereum blockchain project that extracts eth2 node information from the network save it to the datastore. It also exposes a graphQL interface to access the information saved in the datastore.
 
 ## Getting Started
-There are three main component in the project:
+There are three main components in the project:
 1. Crawler: crawls the network for eth2 nodes, extract additional information about the node and save it to the datastore
 2. MongoDB: datastore to save eth2 nodes information
 3. GraphQL Interface: provide access the stored information
