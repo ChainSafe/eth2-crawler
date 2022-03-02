@@ -16,7 +16,7 @@ jobs:
         with:
           release-type: go
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         if: ${{ steps.release.outputs.release_created }}
       - uses: kciter/aws-ecr-action@v4
         with:
