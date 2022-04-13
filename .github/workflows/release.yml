@@ -11,7 +11,7 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - uses: GoogleCloudPlatform/release-please-action@v3.1
+      - uses: GoogleCloudPlatform/release-please-action@v3.2
         id: release
         with:
           release-type: go
